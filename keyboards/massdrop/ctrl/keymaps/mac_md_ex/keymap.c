@@ -275,12 +275,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+// led_instruction_t led_instructions[] = {
+//     //Please see ../default_md/keymap.c for examples
+
+//     //All LEDs use the user's selected pattern (this is the factory default)
+//     //  { .flags = LED_FLAG_USE_ROTATE_PATTERN },
+//     //All LEDs use the user's selected pattern
+//     //On layer 1, all key LEDs (except the top row which keeps active pattern) are red while all edge LEDs are green
+//     //When layer 1 is active, key LEDs use red    (id0  32 -  17: 1111 1111 1111 1111 0000 0000 0000 0000 = 0xFFFF0000) (except top row 16 - 1)
+//     //When layer 1 is active, key LEDs use red    (id1  64 -  33: 1111 1111 1111 1111 1111 1111 1111 1111 = 0xFFFFFFFF)
+//     //When layer 1 is active, key LEDs use red    (id2  87 -  65: 0000 0000 0111 1111 1111 1111 1111 1111 = 0x007FFFFF)
+//     //When layer 1 is active, edge LEDs use green (id2  95 -  88: 1111 1111 1000 0000 0000 0000 0000 0000 = 0xFF800000)
+//     //When layer 1 is active, edge LEDs use green (id3 119 -  96: 0000 0000 1111 1111 1111 1111 1111 1111 = 0x00FFFFFF)
+//      { .flags = LED_FLAG_USE_ROTATE_PATTERN },
+//     { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 0xFFFFFFFF, .id1 = 0xFFFFFFFF, .id2 = 0x007FFFFF, .r = 255 },
+//     { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB , .id2 = 0xFF800000, .id3 = 0x00FFFFFF, .g = 255},
+
+//     //end must be set to 1 to indicate end of instruction set
+//      { .end = 1 }
+// };
+
 led_instruction_t led_instructions[] = {
-    //Please see ../default_md/keymap.c for examples
-
-    //All LEDs use the user's selected pattern (this is the factory default)
-     { .flags = LED_FLAG_USE_ROTATE_PATTERN },
-
-    //end must be set to 1 to indicate end of instruction set
-     { .end = 1 }
+	{ .flags = LED_FLAG_MATCH_ID | LED_FLAG_MATCH_LAYER | LED_FLAG_USE_RGB, .id2 = 4286578688, .id3 = 8388607, .layer = 0, .r = 33, .g =150, .b = 243},
+	{ .flags = LED_FLAG_MATCH_ID | LED_FLAG_MATCH_LAYER | LED_FLAG_USE_RGB, .id2 = 7342080, .layer = 0, .r = 76, .g =175, .b = 80},
+	{ .flags = LED_FLAG_MATCH_ID | LED_FLAG_MATCH_LAYER | LED_FLAG_USE_RGB, .id0 = 4294967295, .id1 = 4294967295, .id2 = 4294967295, .id3 = 8388607, .layer = 1,  .r = 244, .g =67, .b = 54},
+	{ .end = 1 }
 };
