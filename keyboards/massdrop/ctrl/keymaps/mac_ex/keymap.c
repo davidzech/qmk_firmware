@@ -45,8 +45,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-    rgblight_sethsv(HSV_COLOR_MODO2);
-    rgb_matrix_set_flags(LED_FLAG_ALL);
+    rgb_matrix_set_flags(LED_FLAG_UNDERGLOW);
+    rgb_matrix_sethsv_noeeprom(HSV_COLOR_MODO2);
 };
 
 // Runs constantly in the background, in a loop.
@@ -111,6 +111,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 if (timer_elapsed32(key_timer) >= 500) {
                     reset_keyboard();
+                }
+            }
+            return false;
+        case RGB_VAI:
+            if (record->event.pressed) {
+                rgb_matrix_increase_val_noeeprom();
+                if (rgb_matrix_get_val() > RGBLIGHT_LIMIT_VAL) {
+                    HSV hsv = rgb_matrix_get_hsv();
+                    hsv.v = RGBLIGHT_LIMIT_VAL;
+                    rgb_matrix_sethsv_noeeprom(hsv.h, hsv.s, hsv.v);
                 }
             }
             return false;
