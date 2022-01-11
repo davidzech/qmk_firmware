@@ -56,7 +56,7 @@ void matrix_scan_user(void) {
 
 void rgb_matrix_indicators_kb(void) {
     if (host_keyboard_led_state().caps_lock) {
-        rgb_matrix_sethsv_noeeprom(0, 255, 200);
+        rgb_matrix_sethsv_noeeprom(HSV_COLOR_CAPS);
     } else {
         rgb_matrix_sethsv_noeeprom(HSV_COLOR_MODO2);
     }
