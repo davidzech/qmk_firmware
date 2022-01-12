@@ -253,7 +253,11 @@ typedef struct {
 } udi_hid_kbd_desc_t;
 
 typedef struct {
+#ifdef APPLE_KEYBOARD
+    uint8_t array[59 + 14];
+#else
     uint8_t array[59];
+#endif
 } udi_hid_kbd_report_desc_t;
 
 // clang-format off

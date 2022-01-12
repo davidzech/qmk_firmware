@@ -455,6 +455,16 @@ void process_action(keyrecord_t *record, action_t action) {
             }
             break;
 #endif
+#ifdef APPLE_KEYBOARD
+        /* Apple Fn */
+        case ACT_APPLE_FN:
+            if (event.pressed) {
+                register_code(KC_APPLE_FN);
+            } else {
+                unregister_code(KC_APPLE_FN);
+            }
+            break;
+#endif
 #ifdef MOUSEKEY_ENABLE
         /* Mouse key */
         case ACT_MOUSEKEY:
@@ -877,6 +887,12 @@ void register_code(uint8_t code) {
     else if
         IS_CONSUMER(code) { host_consumer_send(KEYCODE2CONSUMER(code)); }
 #endif
+#ifdef APPLE_KEYBOARD
+    else if IS_APPLE_FN(code) {
+        add_key(code);
+        send_keyboard_report();
+    }
+#endif
 #ifdef MOUSEKEY_ENABLE
     else if
         IS_MOUSEKEY(code) {
@@ -947,6 +963,12 @@ void unregister_code(uint8_t code) {
             mousekey_off(code);
             mousekey_send();
         }
+#endif
+#ifdef APPLE_KEYBOARD
+    else if IS_APPLE_FN(code) {
+        del_key(code);
+        send_keyboard_report();
+    }
 #endif
 }
 

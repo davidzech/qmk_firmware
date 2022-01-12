@@ -108,6 +108,24 @@ UDC_DESC_STORAGE udi_hid_kbd_report_desc_t udi_hid_kbd_report_desc = {{
     0x81, 0x02,  //   Input (Data, Variable, Absolute)
     // Reserved (1 byte)
     0x81, 0x01,  //   Input (Constant)
+#ifdef APPLE_KEYBOARD
+    // Keycodes (5 bytes)
+    0x19, 0x00,  //   Usage Minimum (0)
+    0x29, 0xFF,  //   Usage Maximum (255)
+    0x15, 0x00,  //   Logical Minimum (0)
+    0x25, 0xFF,  //   Logical Maximum (255)
+    0x95, 0x05,  //   Report Count (5)
+    0x75, 0x08,  //   Report Size (8)
+    0x81, 0x00,  //   Input (Data, Array, Absolute)
+    // Apple Fn (1 byte)
+    0x05, 0xFF,  //   Usage Page (AppleVendor Top Case)
+    0x09, 0x03,  //   Usage (KeyboardFn)
+    0x15, 0x00,  //   Logical Minimum (0)
+    0x25, 0x01,  //   Logical Maximum (1)
+    0x95, 0x01,  //   Report Count (1)
+    0x75, 0x08,  //   Report Size (8)
+    0x81, 0x02,  //   Input (Data, Variable, Absolute)
+#else
     // Keycodes (6 bytes)
     0x19, 0x00,  //   Usage Minimum (0)
     0x29, 0xFF,  //   Usage Maximum (255)
@@ -116,7 +134,7 @@ UDC_DESC_STORAGE udi_hid_kbd_report_desc_t udi_hid_kbd_report_desc = {{
     0x95, 0x06,  //   Report Count (6)
     0x75, 0x08,  //   Report Size (8)
     0x81, 0x00,  //   Input (Data, Array, Absolute)
-
+#endif
     // Status LEDs (5 bits)
     0x05, 0x08,  //   Usage Page (LED)
     0x19, 0x01,  //   Usage Minimum (Num Lock)

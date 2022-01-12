@@ -144,7 +144,11 @@ enum desktop_usages {
 #    define KEYBOARD_REPORT_SIZE 8
 #endif
 
+#ifdef APPLE_KEYBOARD
+#define KEYBOARD_REPORT_KEYS 5
+#else
 #define KEYBOARD_REPORT_KEYS 6
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -179,6 +183,9 @@ typedef union {
         uint8_t mods;
         uint8_t reserved;
         uint8_t keys[KEYBOARD_REPORT_KEYS];
+#ifdef APPLE_KEYBOARD
+        uint8_t fn;
+#endif
     };
 #ifdef NKRO_ENABLE
     struct nkro_report {
