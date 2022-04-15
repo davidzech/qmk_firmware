@@ -1,5 +1,6 @@
 #pragma once
 
+#define APPLE_FN_ENABLE
 #undef VENDOR_ID
 #undef PRODUCT_ID
 #define VENDOR_ID 0x05AC
