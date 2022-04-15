@@ -1,0 +1,8 @@
+#pragma once
+
+#undef VENDOR_ID
+#undef PRODUCT_ID
+#define VENDOR_ID 0x05AC
+#define PRODUCT_ID 0x024f
+#undef RGB_BACKLIGHT_BRIGHTNESS
+#define RGB_BACKLIGHT_BRIGHTNESS 0

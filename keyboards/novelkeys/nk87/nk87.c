@@ -25,10 +25,12 @@
  * Middle LED is blue and red. LED driver 2 RGB 63 Red and Green channel
  * Bottom LED is red only LED driver 2 RGB 48 Blue channel.
  */
-uint8_t CAPS = 0;
-uint8_t FN1 = 0;
-uint8_t FN2 = 0;
 
+static uint8_t CAPS = 0;
+static uint8_t FN1 = 0;
+static uint8_t FN2 = 0;
+
+ // red channel maps to LED blue light, green channel maps to LED red
 bool led_update_kb(led_t led_state) {
     bool res = led_update_user(led_state);
     if(res) {
@@ -37,9 +39,10 @@ bool led_update_kb(led_t led_state) {
         } else {
             CAPS = 0;
         }
+
+        IS31FL3733_set_color( 63+64-1, FN1, FN1, CAPS );
+        IS31FL3733_set_color( 48+64-1, 0, 0, FN2 );
     }
-    IS31FL3733_set_color( 63+64-1, FN1, FN1, CAPS );
-    IS31FL3733_set_color( 48+64-1, 0, 0, FN2 );
     return res;
 }
 
@@ -54,5 +57,5 @@ __attribute__((weak)) layer_state_t layer_state_set_user(layer_state_t state) {
     } else {
         FN2 = 0;
     }
-  return state;
+    return state;
 }
