@@ -13,7 +13,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
+
 #include QMK_KEYBOARD_H
+#include "raw_hid.h"
 
 enum custom_keycodes {
     KC_SWTCH_WIN = SAFE_RANGE,
@@ -25,12 +29,12 @@ enum custom_keycodes {
 
 #define KC_MSNP LSFT(LGUI(KC_4))    // Mac snip tool
 
-enum layers {
+enum layer {
     MAC,
     MAC_FN,
     WIN,
     WIN_FN
-};
+} layer;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [MAC] = LAYOUT_all( /* Base */
@@ -89,6 +93,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     layer_off(1);
                 }
+
+
             }
             return true;
 
@@ -96,7 +102,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 key_timer = timer_read32();
             } else {
-                if (timer_elapsed32(key_timer) >= 1000) {
+                if (timer_elapsed32(key_timer) >= 500) {
                     SEND_STRING(SS_LGUI(SS_LCTRL("q")));
                 }
             }
@@ -173,3 +179,57 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     led_update_kb(host_keyboard_led_state());
     return state;
 }
+
+#define MSG_MOVE_LAYER 0
+
+typedef uint8_t message_type_t;
+typedef struct __attribute__((packed)) {
+    message_type_t type;
+    uint8_t data[];
+} message_t;
+
+typedef struct __attribute__((packed))  {
+    uint8_t layer;
+} move_layer_t;
+
+typedef union __attribute__((packed))  {
+    uint8_t success;
+    uint8_t raw[32];
+} move_layer_response_t;
+
+void handle_move_layer(move_layer_t *data, move_layer_response_t *response) {
+    switch (data->layer) {
+        case MAC:
+            layer_move(MAC);
+            response->success = 1;
+            break;
+
+        case WIN:
+            layer_move(WIN);
+            response->success = 1;
+            break;
+        default:
+            response->success = 0;
+            break;
+    }
+}
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    // Your code goes here. data is the packet received from host.
+    uint8_t resp[32] = {0xff};
+    if (length > 0) {
+        message_t *msg = (message_t*)data;
+        switch (msg->type) {
+            case MSG_MOVE_LAYER:
+                handle_move_layer((move_layer_t*)msg->data, (move_layer_response_t*)resp);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    raw_hid_send(resp, sizeof(resp));
+}
+
+
