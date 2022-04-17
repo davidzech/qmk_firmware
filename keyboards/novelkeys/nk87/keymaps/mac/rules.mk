@@ -1,4 +1,3 @@
 NKRO_ENABLE = no
 RAW_ENABLE = yes
-VIA_ENABLE = no
 BOOTMAGIC_ENABLE := yes
