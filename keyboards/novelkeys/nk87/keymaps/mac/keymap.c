@@ -96,11 +96,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         case KC_APLCK:
             if (record->event.pressed) {
+                register_code(KC_F13);
                 key_timer = timer_read32();
             } else {
                 if (timer_elapsed32(key_timer) >= 500) {
                     SEND_STRING(SS_LGUI(SS_LCTRL("q")));
                 }
+                unregister_code(KC_F13);
             }
 
             return false;
